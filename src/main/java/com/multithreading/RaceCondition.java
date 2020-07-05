@@ -14,6 +14,7 @@ public class RaceCondition {
     long startTime = System.currentTimeMillis();
     incrementorThread.start();
     decrementorThread.start();
+    // join is used to make sure the below lines get printed after the both thread is completed
     incrementorThread.join();
     decrementorThread.join();
 
