@@ -64,10 +64,10 @@ public class SemaphoreLockDemo {
         }
         public void write() throws InterruptedException {
            // Thread.sleep(2000);
-            //Thread.sleep(2000);
+            Thread.sleep(2000);
             System.out.println(" I am writing " + Thread.currentThread().getName());
 
-           //semaphore.release();
+           semaphore.release(1);
         }
     }
 }

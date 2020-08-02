@@ -20,6 +20,10 @@ public class SemaphoreScalableProducerConsumer {
         Thread thread3 = new Thread(new Producer(inbox));
         Thread thread4 = new Thread(new Consumer(inbox));
         Thread thread5 = new Thread(new Consumer(inbox));
+        Thread thread6 = new Thread(new Producer(inbox));
+        Thread thread7 = new Thread(new Producer(inbox));
+        Thread thread8 = new Thread(new Consumer(inbox));
+        Thread thread9 = new Thread(new Consumer(inbox));
 
         thread1.start();
         thread.start();
@@ -27,6 +31,10 @@ public class SemaphoreScalableProducerConsumer {
         thread3.start();
         thread4.start();
         thread5.start();
+        thread6.start();
+        thread7.start();
+        thread8.start();
+        thread9.start();
     }
     private static class Producer implements Runnable {
         Inbox inbox;

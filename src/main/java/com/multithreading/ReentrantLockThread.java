@@ -45,13 +45,14 @@ public class ReentrantLockThread {
                     e.printStackTrace();
                 }
                 // If thread 0 is executing ..other thread will go to else loop
+
                 if (priceContainer.getReentrantLock().tryLock()) {
                     updatePrice();
-                    log.debug("Price for apple share :" + priceContainer.getAppleShare());
+                    log.debug("Price for apple share :" + priceContainer.getAppleShare() + "   " +Thread.currentThread().getName());
                     log.debug("Price for MS share :" + priceContainer.getMicrosoftShare());
                     log.debug("Price for google share :" + priceContainer.getGoogleShare());
                 } else {
-                    log.debug("Didn't get lock OOOOO  ");
+                    log.debug("Didn't get lock :  "+ Thread.currentThread().getName());
                 }
             }
         }

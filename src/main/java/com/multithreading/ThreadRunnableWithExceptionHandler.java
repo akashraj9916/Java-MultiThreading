@@ -12,13 +12,20 @@ public class ThreadRunnableWithExceptionHandler {
             throw new RuntimeException(" Runtime Exception Intentional");
         }
         );
-        thread.setName("New Thread 1");
+        Thread thread1 = new Thread(() -> {
+            log.debug("TTTTT name :" + Thread.currentThread().getName());
+            log.debug("Priority of Thread is :" + Thread.currentThread().getPriority());
+           // throw new RuntimeException(" Runtime Exception Intentional");
+        }
+        );
+        thread.setName("New Thread 2");
         thread.setPriority(Thread.MAX_PRIORITY);
         // need to set this before thread starts
         thread.setUncaughtExceptionHandler((t, e) -> log.debug(" Exception Caught here : " + "for Thread " + t.getName() + " Exception is :" + e.getMessage() ));
-        log.debug(" Before Thread starts");
+        log.debug(" Before Thread starts "+ Thread.currentThread().getName());
+        thread1.start();
         thread.start();
-        log.debug(" After Thread starts");
+        log.debug(" After Thread starts " + Thread.currentThread().getName());
 
     }
 }
