@@ -30,9 +30,9 @@ public class ChopStick {
     }
     @Override
     public String toString() {
-        return "ChopStick{" +
-                "id=" + id +
-                '}';
+        return
+                "id=" + id ;
+
     }
 
 }

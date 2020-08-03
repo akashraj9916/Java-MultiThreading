@@ -2,10 +2,13 @@ package com.diningphilospher;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class DiningPhilospher {
+
     public static void main(String[] args) throws InterruptedException {
+        long startTime = System.currentTimeMillis();
         ExecutorService executorService = Executors.newFixedThreadPool(Constants.NUMBER_OF_PHILOSPHER);
         final Philospher[] philosphers = new Philospher[Constants.NUMBER_OF_PHILOSPHER];;
         try {
@@ -24,12 +27,12 @@ public class DiningPhilospher {
         }
         finally {
             executorService.shutdown();
-            while(!executorService.isTerminated()){
-                Thread.sleep(1000);
-            }
+            executorService.awaitTermination(2, TimeUnit.SECONDS);
             for(Philospher p : philosphers){
                 System.out.println(" Philospher id: " + p.getId() +" has eaten: "+ p.eatingCounter());
             }
+            long endTime = System.currentTimeMillis() -startTime;
+            System.out.println(" Total time taken :" +endTime);
         }
 
     }

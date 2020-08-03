@@ -1,13 +1,14 @@
 package com.diningphilospher;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Philospher implements Runnable{
     private int id;
     private ChopStick leftChopstick;
     private ChopStick rightChopstick;
     private Random random;
-    private int eatingCount;
+    private AtomicInteger eatingCount = new AtomicInteger(0);
 
     private volatile boolean  isFull= false;
 
@@ -42,11 +43,11 @@ public class Philospher implements Runnable{
     }
     public void eating() throws InterruptedException {
         System.out.println(" Philospher is eating: " + this);
-        this.eatingCount++;
+        this.eatingCount.incrementAndGet();
         Thread.sleep(random.nextInt(1000));
     }
     public int eatingCounter(){
-        return this.eatingCount;
+        return this.eatingCount.get();
     }
     public int getId() {
         return id;
@@ -61,10 +62,10 @@ public class Philospher implements Runnable{
     }
     @Override
     public String toString() {
-        return "Philospher{" +
+        return
                 "id=" + id +
                 ", leftChopstick=" + leftChopstick +
-                ", rightChopstick=" + rightChopstick +
-                '}';
+                ", rightChopstick=" + rightChopstick;
+
     }
 }
