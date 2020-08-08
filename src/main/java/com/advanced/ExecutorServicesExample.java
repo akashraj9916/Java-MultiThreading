@@ -1,8 +1,9 @@
 package com.advanced;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ExecutorServicesExample {
@@ -17,17 +18,50 @@ public class ExecutorServicesExample {
         ExecutorService cachedExecutorService = Executors.newCachedThreadPool(customThreadfactory);
         // Create three simple tasks with 1000 ms sleep time
         SimpleTask simpleTask1 = new SimpleTask(1000);
-      //  SimpleTask simpleTask2 = new SimpleTask(1000);
-       // SimpleTask simpleTask3 = new SimpleTask(1000);
+        SimpleTask simpleTask2 = new SimpleTask(1000);
+        SimpleTask simpleTask3 = new SimpleTask(1000);
         SimpleTask simpleTask4 = new SimpleTask(1000);
         SimpleTask simpleTask5 = new SimpleTask(1000);
 
         // Execute three simple tasks with 1000 ms sleep time
-        fixedExecutorService.execute(simpleTask1);
-      //  fixedExecutorService.execute(simpleTask2);
-      //  fixedExecutorService.execute(simpleTask3);
-        cachedExecutorService.execute(simpleTask4);
-        cachedExecutorService.execute(simpleTask5);
+        //fixedExecutorService.submit(simpleTask1);
+       /* List<SimpleTask> simpleTasks = new ArrayList<>();
+        simpleTasks.add(simpleTask1);
+        simpleTasks.add(simpleTask4);
+        try {
+            final List<Future<Object>> futures = fixedExecutorService.invokeAll(simpleTasks);
+            futures.forEach(future -> {
+                try {
+                    System.out.println("Current thread " + Thread.currentThread().getName());
+                    Object o = future.get();
+                    System.out.println(o);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                    System.out.println(" Exception Caught here");
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finally{
+            fixedExecutorService.shutdown();
+        }*/
+        try {
+          //  fixedExecutorService.execute(simpleTask2);
+          //  fixedExecutorService.execute(simpleTask3);
+            fixedExecutorService.submit(simpleTask2);
+            fixedExecutorService.submit(simpleTask3);
+        }
+        catch( Exception e){
+            System.out.println(" Exception for execute :");
+        }
+        finally{
+            fixedExecutorService.shutdown();
+        }
+       // cachedExecutorService.execute(simpleTask4);
+       // cachedExecutorService.execute(simpleTask5);
 
     }
     private static class CustomThreadFactoryBuilder {
@@ -91,6 +125,7 @@ public class ExecutorServicesExample {
     private static class SimpleTask implements Runnable {
 
         private long sleepTime;
+        private AtomicInteger atomicInteger = new AtomicInteger(0);
 
         public SimpleTask(long sleepTime) {
             super();
@@ -103,10 +138,16 @@ public class ExecutorServicesExample {
                 try {
                     System.out.println("Simple task is running on " + Thread.currentThread().getName() + " with priority " + Thread.currentThread().getPriority());
                     Thread.sleep(sleepTime);
+                    atomicInteger.getAndIncrement();
+                    if( atomicInteger.get() == 2){
+                        throw new ArithmeticException(" Hello Exception");
+                    }
+                    System.out.println(" Crosses exception block with value :"+ atomicInteger.get());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+
         }
 
     }
