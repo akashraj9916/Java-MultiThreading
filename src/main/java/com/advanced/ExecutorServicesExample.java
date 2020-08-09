@@ -49,21 +49,25 @@ public class ExecutorServicesExample {
             fixedExecutorService.shutdown();
         }*/
         try {
-          //  fixedExecutorService.execute(simpleTask2);
-          //  fixedExecutorService.execute(simpleTask3);
+            //  fixedExecutorService.execute(simpleTask2);
+            //  fixedExecutorService.execute(simpleTask3);
             fixedExecutorService.submit(simpleTask2);
-            fixedExecutorService.submit(simpleTask3);
-        }
-        catch( Exception e){
+            Future f1 = fixedExecutorService.submit(simpleTask3);
+            Future f2 = fixedExecutorService.submit(simpleTask4);
+            f1.get();
+            f2.get();
+
+        } catch (Exception e) {
             System.out.println(" Exception for execute :");
-        }
-        finally{
+            e.printStackTrace();
+        } finally {
             fixedExecutorService.shutdown();
         }
-       // cachedExecutorService.execute(simpleTask4);
-       // cachedExecutorService.execute(simpleTask5);
+        // cachedExecutorService.execute(simpleTask4);
+        // cachedExecutorService.execute(simpleTask5);
 
     }
+
     private static class CustomThreadFactoryBuilder {
         private String namePrefix = null;
         private boolean daemon = false;
@@ -122,6 +126,7 @@ public class ExecutorServicesExample {
         }
 
     }
+
     private static class SimpleTask implements Runnable {
 
         private long sleepTime;
@@ -134,15 +139,19 @@ public class ExecutorServicesExample {
 
         @Override
         public void run() {
-            while (true) {
+            while(true) {
                 try {
                     System.out.println("Simple task is running on " + Thread.currentThread().getName() + " with priority " + Thread.currentThread().getPriority());
                     Thread.sleep(sleepTime);
                     atomicInteger.getAndIncrement();
-                    if( atomicInteger.get() == 2){
-                        throw new ArithmeticException(" Hello Exception");
+                    if (atomicInteger.get() == 1) {
+                        System.out.println(" Entered sleep " + Thread.currentThread().getName());
+                        Thread.sleep(5000);
                     }
-                    System.out.println(" Crosses exception block with value :"+ atomicInteger.get());
+                    if (atomicInteger.get() == 2) {
+                        throw new ArithmeticException(" Hello Exception" + Thread.currentThread().getName());
+                    }
+                    System.out.println(" Crosses exception block with value :" + atomicInteger.get());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
