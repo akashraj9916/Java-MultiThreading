@@ -6,7 +6,7 @@ import java.util.concurrent.RecursiveAction;
 
 public class ParallelMergeSortForkJoin {
     public static void main(String[] args) {
-        int maxval = 15000000;
+        int maxval = 150000000;
         int arr[] = new int[maxval];
         int arr1[] = new int[maxval];
         ForkJoinPool pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
